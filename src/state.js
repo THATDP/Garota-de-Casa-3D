@@ -1,0 +1,5 @@
+const KEY='meu-cantinho-save-v1';
+export const defaults=()=>({coins:120,done:{},inventory:{semente:3,tomate:2,queijo:2},owned:[],decor:'rosa',outfit:'terracota',garden:{stage:0,wateredAt:0},settings:{music:35,sound:65,mute:false},day:new Date().toLocaleDateString('sv-SE'),daily:{},achievements:[]});
+export function load(){try{const raw=JSON.parse(localStorage.getItem(KEY));if(!raw||typeof raw!=='object'||Array.isArray(raw))return defaults();let d=defaults(); const s={...d,...raw,coins:Number.isFinite(raw.coins)?Math.max(0,raw.coins):d.coins,done:{...d.done,...(raw.done||{})},inventory:{...d.inventory,...(raw.inventory||{})},garden:{...d.garden,...(raw.garden||{})},settings:{...d.settings,...(raw.settings||{})},owned:Array.isArray(raw.owned)?raw.owned:[],achievements:Array.isArray(raw.achievements)?raw.achievements:[],daily:raw.daily&&typeof raw.daily==='object'?raw.daily:{}};if(s.day!==d.day){s.day=d.day;s.daily={}}return s}catch{return defaults()}}
+export function save(s){try{localStorage.setItem(KEY,JSON.stringify(s))}catch(e){console.warn('Não foi possível salvar:',e)}}
+export function reset(){try{localStorage.removeItem(KEY)}catch{}}
